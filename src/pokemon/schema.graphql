@@ -1,0 +1,46 @@
+type Pokemon {
+  id: ID!
+  title: String
+  height: Float
+  weight: Float
+  image: String
+  description: String
+  createdById: Int
+  createdAt: String
+  updatedAt: String
+}
+
+input NewPokemon {
+  title: String!
+  height: Float!
+  weight: Float!
+  image: String!
+  description: String!
+  createdById: Int
+}
+
+type PokemonWhereUniqueInput {
+  id: ID
+  title: String
+}
+
+input UpdatePokemon {
+  id: ID!
+  title: String
+  height: Float
+  weight: Float
+  image: String
+  description: String
+  createdById: Int
+}
+
+type Query {
+    pokemons: [Pokemon!]!
+    pokemon(id: ID!): Pokemon
+}
+
+type Mutation {
+    createPokemon(input: NewPokemon): Pokemon!
+    updatePokemon(input: UpdatePokemon): Pokemon
+    deletePokemon(id: ID!): Pokemon
+}
