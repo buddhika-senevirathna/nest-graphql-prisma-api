@@ -78,6 +78,8 @@ export abstract class IMutation {
 
     abstract updateUser(input?: Nullable<UpdateUser>): Nullable<User> | Promise<Nullable<User>>;
 
+    abstract loginUser(email?: Nullable<string>, password?: Nullable<string>): Nullable<string> | Promise<Nullable<string>>;
+
     abstract deleteUser(id: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
@@ -89,6 +91,14 @@ export class User {
     role?: Nullable<string>;
     createdAt?: Nullable<string>;
     updatedAt?: Nullable<string>;
+}
+
+export class LoggedUser {
+    id: string;
+    name?: Nullable<string>;
+    email: string;
+    role?: Nullable<string>;
+    token?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;
