@@ -34,9 +34,27 @@ input UpdatePokemon {
   createdById: Int
 }
 
+input SortBy{
+  title:String
+  height:String
+  weight:String
+  createdAt:String
+}
+
+input Filters {
+  title:String
+  weightfrom:Float
+  weightto:Float
+  heightFrom:Float
+  heightto:Float
+  skip:Int
+  take:Int
+}
+
 type Query {
     pokemons: [Pokemon!]!
-    pokemon(id: ID!): Pokemon
+    pokemon( id: ID! ): Pokemon
+    getPokemons( filters: Filters, sortBy: SortBy ): [Pokemon]
 }
 
 type Mutation {

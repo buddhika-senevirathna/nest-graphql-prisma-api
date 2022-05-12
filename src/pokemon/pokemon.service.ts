@@ -18,6 +18,33 @@ export class PokemonService {
         return this.prisma.pokemon.findMany({});
     }
 
+    async getPokemons(filters, sortBy): Promise<Pokemon[]> {
+        // Allowed page counts
+        const allowedPageCounts = [10, 20, 50];
+
+        // default page count 10 will add to the page count 
+        // if not provided user provided any wrong page count 
+        const take = filters.take && allowedPageCounts.includes(filters.take) ? filters.take : 10;
+
+        const where = (filters.title || filters.weightfrom || filters.weightto || filters.heightfrom || filters.heightto)
+          ? {
+              AND: [
+                { title: {contains: filters.filter }},
+                { weight: {gte: filters.weightfrom }},
+                { weight: {lte: filters.weightto }},
+                { height: {gte: filters.heightfrom }},
+                { height: {lte: filters.heightto }},
+              ],
+            }
+          : {};
+
+        return this.prisma.pokemon.findMany({
+            where,
+            skip: filters.skip,
+            take: take,
+        });
+    }
+
     async createPokemon(data: Prisma.PokemonCreateInput): Promise<Pokemon> {
         return this.prisma.pokemon.create({
             data
