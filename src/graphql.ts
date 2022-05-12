@@ -26,6 +26,23 @@ export class UpdatePokemon {
     createdById?: Nullable<number>;
 }
 
+export class SortBy {
+    title?: Nullable<string>;
+    height?: Nullable<string>;
+    weight?: Nullable<string>;
+    createdAt?: Nullable<string>;
+}
+
+export class Filters {
+    title?: Nullable<string>;
+    weightfrom?: Nullable<number>;
+    weightto?: Nullable<number>;
+    heightFrom?: Nullable<number>;
+    heightto?: Nullable<number>;
+    skip?: Nullable<number>;
+    take?: Nullable<number>;
+}
+
 export class NewUser {
     name?: Nullable<string>;
     email: string;
@@ -61,6 +78,8 @@ export abstract class IQuery {
     abstract pokemons(): Pokemon[] | Promise<Pokemon[]>;
 
     abstract pokemon(id: string): Nullable<Pokemon> | Promise<Nullable<Pokemon>>;
+
+    abstract getPokemons(filters?: Nullable<Filters>, sortBy?: Nullable<SortBy>): Nullable<Nullable<Pokemon>[]> | Promise<Nullable<Nullable<Pokemon>[]>>;
 
     abstract users(): Nullable<User>[] | Promise<Nullable<User>[]>;
 
