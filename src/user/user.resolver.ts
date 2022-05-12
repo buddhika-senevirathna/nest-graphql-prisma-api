@@ -21,15 +21,21 @@ export class UserResolver {
         return this.userService.createUser(args);
     }
 
-    @Mutation('updatePokemon')
+    @Mutation('updateUser')
     async update(@Args('input') args: UpdateUser) {
         let id = args.id;
         delete args.id;
         return this.userService.updateUser({where:id, data:args});
     }
 
-    @Mutation('deletePokemon')
+    @Mutation('deleteUser')
     async delete(@Args('id') args: string) {
         return this.userService.deleteUser(args);
+    }
+
+    // User authentication
+    @Mutation('loginUser')
+    async loginUser(@Args('email') email:string, @Args('password') password:string) {
+        return this.userService.loginUser(email, password);
     }
 }
