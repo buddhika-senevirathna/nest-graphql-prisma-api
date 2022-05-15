@@ -1,5 +1,6 @@
-import { Resolver, Query, Args, Mutation, Info } from '@nestjs/graphql';
-import { Prisma } from '@prisma/client';
+import { UseGuards } from '@nestjs/common';
+import { Resolver, Query, Args, Mutation, Info, Context } from '@nestjs/graphql';
+import { JWtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { Filters, NewPokemon, PokemonWhereUniqueInput, SortBy, UpdatePokemon } from 'src/graphql';
 import { PokemonService } from './pokemon.service';
 
@@ -8,34 +9,41 @@ export class PokemonResolver {
     constructor(private readonly pokemonService: PokemonService) {}
 
     @Query('pokemons')
+    @UseGuards(JWtAuthGuard)
     async pokemons() {
         return this.pokemonService.pokemons();
     }
 
     @Query('pokemon')
+    @UseGuards(JWtAuthGuard)
     async pokemon(@Args('id') args: string) {
         return this.pokemonService.pokemon(args);
     }
 
     @Query('getPokemons')
+    @UseGuards(JWtAuthGuard)
     async getPokemons(@Args('filters') filters:Filters, @Args('sortBy') sortBy: SortBy) {
         return this.pokemonService.getPokemons(filters, sortBy);
     }
 
     @Mutation('createPokemon')
-    async create(@Args('input') args: NewPokemon) {
-        return this.pokemonService.createPokemon(args);
+    @UseGuards(JWtAuthGuard)
+    async create(@Args('input') args: NewPokemon, @Context() context) {
+        console.log(context.req.user);
+        return this.pokemonService.createPokemon(args, context.req.user);
     }
 
    @Mutation('updatePokemon')
-    async updatePokemon(@Args('input') args: PokemonWhereUniqueInput) {
+   @UseGuards(JWtAuthGuard)
+    async updatePokemon(@Args('input') args: PokemonWhereUniqueInput, @Context() context) {
         let id = args.id;
         delete args.id;
         return this.pokemonService.updatePokemon({where:id, data:args});
     }
 
     @Mutation('deletePokemon')
-    async delete(@Args('id') args: string) {
+    @UseGuards(JWtAuthGuard)
+    async delete(@Args('id') args: string, @Context() context) {
         return this.pokemonService.deletePokemon(args);
     }
 }

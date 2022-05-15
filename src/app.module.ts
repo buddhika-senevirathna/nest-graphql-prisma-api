@@ -10,9 +10,17 @@ import { PrismaService } from './prisma/prisma.service';
 import { UserResolver } from './user/user.resolver';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
+import { AuthService } from './auth/auth.service';
+import { AuthResolver } from './auth/auth.resolver';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
@@ -21,8 +29,9 @@ import { UserService } from './user/user.service';
     }),
     PokemonModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [],
-  providers: [ PokemonResolver, PokemonService, PrismaService, UserResolver, UserService],
+  providers: [ PokemonResolver, PokemonService, PrismaService, UserResolver, UserService, AuthService, AuthResolver],
 })
 export class AppModule {}

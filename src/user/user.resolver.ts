@@ -1,4 +1,6 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { JWtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { NewUser, UpdateUser } from 'src/graphql';
 import { UserService } from './user.service';
 
@@ -7,7 +9,8 @@ export class UserResolver {
     constructor(private userService: UserService){}
 
     @Query('users')
-    async users(){
+    @UseGuards(JWtAuthGuard)
+    async users(@Context() context){
         return this.userService.users();
     }
 
@@ -22,20 +25,16 @@ export class UserResolver {
     }
 
     @Mutation('updateUser')
-    async update(@Args('input') args: UpdateUser) {
+    @UseGuards(JWtAuthGuard)
+    async update(@Args('input') args: UpdateUser, @Context() context) {
         let id = args.id;
         delete args.id;
         return this.userService.updateUser({where:id, data:args});
     }
 
     @Mutation('deleteUser')
+    @UseGuards(JWtAuthGuard)
     async delete(@Args('id') args: string) {
         return this.userService.deleteUser(args);
-    }
-
-    // User authentication
-    @Mutation('loginUser')
-    async loginUser(@Args('email') email:string, @Args('password') password:string) {
-        return this.userService.loginUser(email, password);
     }
 }

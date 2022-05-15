@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Pokemon, Prisma } from '@prisma/client';
+import { Int } from '@nestjs/graphql';
+import { Pokemon, Prisma, User } from '@prisma/client';
+import { parse } from 'path';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -45,7 +47,9 @@ export class PokemonService {
         });
     }
 
-    async createPokemon(data: Prisma.PokemonCreateInput): Promise<Pokemon> {
+    async createPokemon(data: Prisma.PokemonCreateInput, context: User): Promise<Pokemon> {
+        //console.log(context);
+        //data.createdBy = parseInt(context.id);
         return this.prisma.pokemon.create({
             data
         })

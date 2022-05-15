@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { sign } from "jsonwebtoken";
 
 @Injectable()
 export class UserService {
@@ -20,6 +19,14 @@ export class UserService {
         });
     }
 
+    async findUser(email: string):Promise<User | null>{
+        return await this.prisma.user.findUnique({ 
+            where: {
+                email: email,
+            },
+        });
+    }
+
     async createUser(data: Prisma.UserCreateInput):Promise<User>{
         let password = data.password;
 
@@ -31,7 +38,7 @@ export class UserService {
         });
 
         if (user) {
-            throw new HttpException("User already exists", HttpStatus.UNAUTHORIZED);
+            throw new HttpException("User already exists", HttpStatus.BAD_REQUEST);
         }
 
         delete data.password;
@@ -67,31 +74,5 @@ export class UserService {
                 id: parseInt(id)
             }
         });
-    }
-
-    async loginUser(email: string, password:string):Promise<String>{
-        // find the user
-        const user = await this.prisma.user.findFirst({ 
-            where: {
-                email: email,
-            },
-        });
-
-        if (!user) {
-            throw new HttpException("invalid_credentials", HttpStatus.UNAUTHORIZED);
-        }
-        // compare the passwords
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-            throw new Error("invalid_credentials");
-        }
-
-        delete user.password;
-        //generate 
-        const token = sign({ userId: user.id }, "APP_SECRET");
-
-        return token;
-        
     }
 }
