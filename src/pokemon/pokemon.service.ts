@@ -47,11 +47,16 @@ export class PokemonService {
         });
     }
 
-    async createPokemon(data: Prisma.PokemonCreateInput, context: User): Promise<Pokemon> {
-        //console.log(context);
-        //data.createdBy = parseInt(context.id);
+    async createPokemon(input: Prisma.PokemonCreateInput, user: User): Promise<Pokemon> {
         return this.prisma.pokemon.create({
-            data
+            data:{
+                ...input,
+                createdBy: {
+                    connect:{
+                        id: user.id
+                    },
+                },
+            },
         })
     }
 
