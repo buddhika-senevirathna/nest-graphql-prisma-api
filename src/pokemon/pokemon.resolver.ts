@@ -22,14 +22,13 @@ export class PokemonResolver {
 
     @Query('getPokemons')
     @UseGuards(JWtAuthGuard)
-    async getPokemons(@Args('filters') filters:Filters, @Args('sortBy') sortBy: SortBy) {
-        return this.pokemonService.getPokemons(filters, sortBy);
+    async getPokemons(@Args('filters') filters:Filters) {
+        return this.pokemonService.getPokemons(filters);
     }
 
     @Mutation('createPokemon')
     @UseGuards(JWtAuthGuard)
     async create(@Args('input') args: NewPokemon, @Context() context) {
-        console.log(context.req.user);
         return this.pokemonService.createPokemon(args, context.req.user);
     }
 

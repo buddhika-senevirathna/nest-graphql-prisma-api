@@ -49,12 +49,24 @@ input Filters {
   heightto:Float
   skip:Int
   take:Int
+  orderBy: PokemonsOrderByInput
+}
+
+input PokemonsOrderByInput {
+  createdAt: Sort
+  height: Sort
+  weight: Sort
+}
+
+enum Sort {
+  asc
+  desc
 }
 
 type Query {
     pokemons: [Pokemon!]!
     pokemon( id: ID! ): Pokemon
-    getPokemons( filters: Filters, sortBy: SortBy ): [Pokemon]
+    getPokemons( filters: Filters ): [Pokemon]
 }
 
 type Mutation {

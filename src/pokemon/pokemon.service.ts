@@ -20,7 +20,7 @@ export class PokemonService {
         return this.prisma.pokemon.findMany({});
     }
 
-    async getPokemons(filters, sortBy): Promise<Pokemon[]> {
+    async getPokemons(filters): Promise<Pokemon[]> {
         // Allowed page counts
         const allowedPageCounts = [10, 20, 50];
 
@@ -44,6 +44,7 @@ export class PokemonService {
             where,
             skip: filters.skip,
             take: take,
+            orderBy: filters.orderBy,
         });
     }
 
