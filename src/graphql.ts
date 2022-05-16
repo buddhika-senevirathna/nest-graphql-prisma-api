@@ -7,6 +7,11 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export class LoginUserInput {
+    email: string;
+    password: string;
+}
+
 export class NewPokemon {
     title: string;
     height: number;
@@ -57,6 +62,29 @@ export class UpdateUser {
     role?: Nullable<string>;
 }
 
+export class LoginResponse {
+    access_token: string;
+    user: User;
+}
+
+export abstract class IMutation {
+    abstract login(loginUserInput: LoginUserInput): LoginResponse | Promise<LoginResponse>;
+
+    abstract createPokemon(input?: Nullable<NewPokemon>): Pokemon | Promise<Pokemon>;
+
+    abstract updatePokemon(input?: Nullable<UpdatePokemon>): Nullable<Pokemon> | Promise<Nullable<Pokemon>>;
+
+    abstract deletePokemon(id: string): Nullable<Pokemon> | Promise<Nullable<Pokemon>>;
+
+    abstract createUser(input?: Nullable<NewUser>): User | Promise<User>;
+
+    abstract updateUser(input?: Nullable<UpdateUser>): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract loginUser(email?: Nullable<string>, password?: Nullable<string>): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract deleteUser(id: string): Nullable<User> | Promise<Nullable<User>>;
+}
+
 export class Pokemon {
     id: string;
     title?: Nullable<string>;
@@ -84,22 +112,6 @@ export abstract class IQuery {
     abstract users(): Nullable<User>[] | Promise<Nullable<User>[]>;
 
     abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
-}
-
-export abstract class IMutation {
-    abstract createPokemon(input?: Nullable<NewPokemon>): Pokemon | Promise<Pokemon>;
-
-    abstract updatePokemon(input?: Nullable<UpdatePokemon>): Nullable<Pokemon> | Promise<Nullable<Pokemon>>;
-
-    abstract deletePokemon(id: string): Nullable<Pokemon> | Promise<Nullable<Pokemon>>;
-
-    abstract createUser(input?: Nullable<NewUser>): User | Promise<User>;
-
-    abstract updateUser(input?: Nullable<UpdateUser>): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract loginUser(email?: Nullable<string>, password?: Nullable<string>): Nullable<string> | Promise<Nullable<string>>;
-
-    abstract deleteUser(id: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class User {
