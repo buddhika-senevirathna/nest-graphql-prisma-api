@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Sample Nestjs Fastify GraphQL Prisma and PostgreSQL
 
 ## Installation
 
