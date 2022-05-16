@@ -7,6 +7,11 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum Sort {
+    asc = "asc",
+    desc = "desc"
+}
+
 export class LoginUserInput {
     email: string;
     password: string;
@@ -46,6 +51,13 @@ export class Filters {
     heightto?: Nullable<number>;
     skip?: Nullable<number>;
     take?: Nullable<number>;
+    orderBy?: Nullable<PokemonsOrderByInput>;
+}
+
+export class PokemonsOrderByInput {
+    createdAt?: Nullable<Sort>;
+    height?: Nullable<Sort>;
+    weight?: Nullable<Sort>;
 }
 
 export class NewUser {
@@ -80,8 +92,6 @@ export abstract class IMutation {
 
     abstract updateUser(input?: Nullable<UpdateUser>): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract loginUser(email?: Nullable<string>, password?: Nullable<string>): Nullable<string> | Promise<Nullable<string>>;
-
     abstract deleteUser(id: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
@@ -107,7 +117,7 @@ export abstract class IQuery {
 
     abstract pokemon(id: string): Nullable<Pokemon> | Promise<Nullable<Pokemon>>;
 
-    abstract getPokemons(filters?: Nullable<Filters>, sortBy?: Nullable<SortBy>): Nullable<Nullable<Pokemon>[]> | Promise<Nullable<Nullable<Pokemon>[]>>;
+    abstract getPokemons(filters?: Nullable<Filters>): Nullable<Nullable<Pokemon>[]> | Promise<Nullable<Nullable<Pokemon>[]>>;
 
     abstract users(): Nullable<User>[] | Promise<Nullable<User>[]>;
 
